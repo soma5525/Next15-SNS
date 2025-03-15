@@ -2,6 +2,30 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import React from "react";
+
+// SVGコンポーネント用の共通型定義を追加
+type IconProps = React.SVGProps<SVGSVGElement>;
+
+function BellIcon(props: IconProps) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  );
+}
 
 export function Component() {
   return (
@@ -209,8 +233,8 @@ export function Component() {
               </div>
               <div className="space-y-2">
                 <p>
-                  Enjoying the beautiful weather today! Who's up for a hike
-                  later?
+                  Just finished my latest blog post. Check it out and let me
+                  know what you think
                 </p>
               </div>
               <div className="flex items-center justify-between mt-4">
@@ -285,27 +309,7 @@ export function Component() {
   );
 }
 
-function BellIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-    </svg>
-  );
-}
-
-function BookmarkIcon(props) {
+function BookmarkIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -324,7 +328,7 @@ function BookmarkIcon(props) {
   );
 }
 
-function ClockIcon(props) {
+function ClockIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -344,7 +348,7 @@ function ClockIcon(props) {
   );
 }
 
-function CompassIcon(props) {
+function CompassIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -364,7 +368,7 @@ function CompassIcon(props) {
   );
 }
 
-function HeartIcon(props) {
+function HeartIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -383,7 +387,7 @@ function HeartIcon(props) {
   );
 }
 
-function HomeIcon(props) {
+function HomeIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -403,7 +407,7 @@ function HomeIcon(props) {
   );
 }
 
-function LogInIcon(props) {
+function LogInIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -424,7 +428,7 @@ function LogInIcon(props) {
   );
 }
 
-function MailIcon(props) {
+function MailIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -444,7 +448,7 @@ function MailIcon(props) {
   );
 }
 
-function MessageCircleIcon(props) {
+function MessageCircleIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -463,7 +467,7 @@ function MessageCircleIcon(props) {
   );
 }
 
-function SearchIcon(props) {
+function SearchIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -483,7 +487,7 @@ function SearchIcon(props) {
   );
 }
 
-function SendIcon(props) {
+function SendIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -503,7 +507,7 @@ function SendIcon(props) {
   );
 }
 
-function SettingsIcon(props) {
+function SettingsIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -523,7 +527,7 @@ function SettingsIcon(props) {
   );
 }
 
-function Share2Icon(props) {
+function Share2Icon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -546,7 +550,7 @@ function Share2Icon(props) {
   );
 }
 
-function UserIcon(props) {
+function UserIcon(props: IconProps) {
   return (
     <svg
       {...props}
