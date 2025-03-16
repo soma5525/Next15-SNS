@@ -23,7 +23,7 @@ const navItems = [
 ];
 
 // ユーザー情報を取得するヘルパー関数
-async function getUserInfo(clerkId: string) {
+export async function getUserInfo(clerkId: string) {
   try {
     const user = await prisma.user.findUnique({
       where: { clerkId },
@@ -71,10 +71,12 @@ export default async function LeftSidebar() {
   return (
     <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-md p-4 h-full flex flex-col">
       <div className="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-        <Avatar className="w-12 h-12">
-          <AvatarImage src={userImage} />
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
+        <Link href={`profile/${username}`}>
+          <Avatar className="w-12 h-12">
+            <AvatarImage src={userImage} />
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
+        </Link>
         <div>
           <h3 className="text-lg font-bold">{name}</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">

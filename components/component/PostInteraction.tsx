@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { HeartIcon, MessageCircleIcon, Share2Icon, ClockIcon } from "./Icons";
 import { useAuth } from "@clerk/nextjs";
 import { likeAction } from "@/lib/actions";
+import ReplyForm from "./ReplyForm";
 
 interface LikeState {
   likeCount: number;
@@ -48,31 +49,46 @@ const PostInteraction = ({
     }
   };
 
+  const [showReplyForm, setShowReplyForm] = useState(false);
+
   return (
-    <div className="flex items-center ">
-      <form action={handleLikeSubmit}>
-        <Button variant="ghost" size="icon">
-          <HeartIcon
-            className={`h-5 w-5 ${
-              optimisticLike.isLiked
-                ? "text-destructive"
-                : "text-muted-foreground"
-            }`}
-          />
+    <div className="flex flex-col">
+      <div className="flex items-center ">
+        <form action={handleLikeSubmit}>
+          <Button variant="ghost" size="icon">
+            <HeartIcon
+              className={`h-5 w-5 ${
+                optimisticLike.isLiked
+                  ? "text-destructive"
+                  : "text-muted-foreground"
+              }`}
+            />
+          </Button>
+        </form>
+        <span
+          className={`-ml-1 ${
+            optimisticLike.isLiked ? "text-destructive" : ""
+          } `}
+        >
+          {optimisticLike.likeCount}
+        </span>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setShowReplyForm((prev) => !prev)}
+        >
+          <MessageCircleIcon className="h-5 w-5 text-muted-foreground" />
         </Button>
-      </form>
-      <span
-        className={`-ml-1 ${optimisticLike.isLiked ? "text-destructive" : ""} `}
-      >
-        {optimisticLike.likeCount}
-      </span>
-      <Button variant="ghost" size="icon">
-        <MessageCircleIcon className="h-5 w-5 text-muted-foreground" />
-      </Button>
-      <span>{commentNumber}</span>
-      <Button variant="ghost" size="icon">
-        <Share2Icon className="h-5 w-5 text-muted-foreground" />
-      </Button>
+        <span>{commentNumber}</span>
+        <Button variant="ghost" size="icon">
+          <Share2Icon className="h-5 w-5 text-muted-foreground" />
+        </Button>
+      </div>
+      {showReplyForm && (
+        <div className="mt-4">
+          <ReplyForm postId={postId} onClose={() => setShowReplyForm(false)} />
+        </div>
+      )}
     </div>
   );
 };

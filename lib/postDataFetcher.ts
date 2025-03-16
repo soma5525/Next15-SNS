@@ -16,6 +16,15 @@ export async function fetchPosts(userId: string, username?: string) {
             userId: true,
           },
         },
+        replies: {
+          include: {
+            user: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 5, // 表示するリプライの数
+        },
         _count: {
           select: {
             replies: true,
@@ -54,6 +63,15 @@ export async function fetchPosts(userId: string, username?: string) {
           select: {
             userId: true,
           },
+        },
+        replies: {
+          include: {
+            user: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 5,
         },
         _count: {
           select: {
