@@ -299,3 +299,69 @@ export const deleteReplyAction = async (replyId: string) => {
     };
   }
 };
+
+export async function searchAction(query: string) {
+  try {
+    if (!query || query.trim() === "") {
+      return [];
+    }
+
+    // ユーザー検索
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { username: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      take: 10,
+    });
+
+    // 投稿検索
+    const posts = await prisma.post.findMany({
+      where: {
+        content: {
+          contains: query,
+          mode: "insensitive",
+        },
+      },
+      include: {
+        author: true,
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+        replies: {
+          include: {
+            user: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 5,
+        },
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 20,
+    });
+
+    return {
+      users,
+      posts,
+    };
+  } catch (error) {
+    console.error("検索エラー:", error);
+    return {
+      users: [],
+      posts: [],
+    };
+  }
+}

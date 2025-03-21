@@ -3,6 +3,7 @@
 import React, { useOptimistic } from "react";
 import { Button } from "../ui/button";
 import { followAction } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 interface FollowButtonProps {
   isCurrentUser: boolean;
@@ -15,6 +16,8 @@ const FollowButton = ({
   isFollowing,
   userId,
 }: FollowButtonProps) => {
+  const router = useRouter();
+
   const [optimisticFollow, addOptimisticFollow] = useOptimistic<
     { isFollowing: boolean },
     void
@@ -55,8 +58,12 @@ const FollowButton = ({
     try {
       addOptimisticFollow();
       await followAction(userId);
+      // フォローアクション後にページを更新
+      router.refresh();
     } catch (error) {
       console.log(error);
+      // エラー発生時にも更新
+      router.refresh();
     }
   };
 

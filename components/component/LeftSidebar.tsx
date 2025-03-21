@@ -13,15 +13,6 @@ import {
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
-const navItems = [
-  { icon: HomeIcon, label: "Home", href: "/" },
-  { icon: CompassIcon, label: "Explore", href: "/explore" },
-  { icon: BookmarkIcon, label: "Bookmarks", href: "/bookmarks" },
-  { icon: UserIcon, label: "Profile", href: "/profile" },
-  { icon: MessageCircleIcon, label: "Messages", href: "/messages" },
-  { icon: HeartIcon, label: "Likes", href: "/likes" },
-];
-
 // ユーザー情報を取得するヘルパー関数
 export async function getUserInfo(clerkId: string) {
   try {
@@ -68,10 +59,24 @@ export default async function LeftSidebar() {
     }
   }
 
+  // ユーザー名に基づいて動的にnavItemsを生成
+  const navItems = [
+    { icon: HomeIcon, label: "Home", href: "/" },
+    { icon: CompassIcon, label: "Explore", href: "/explore" },
+    { icon: BookmarkIcon, label: "Bookmarks", href: "/bookmarks" },
+    {
+      icon: UserIcon,
+      label: "Profile",
+      href: username ? `/profile/${username}` : "/profile",
+    },
+    { icon: MessageCircleIcon, label: "Messages", href: "/messages" },
+    { icon: HeartIcon, label: "Likes", href: "/likes" },
+  ];
+
   return (
     <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-md p-4 h-full flex flex-col">
       <div className="flex rounded-full items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-        <Link href={`profile/${username}`}>
+        <Link href={username ? `/profile/${username}` : "/profile"}>
           <div className="overflow-hidden rounded-full">
             <Avatar className="w-12 h-12">
               <AvatarImage
@@ -92,7 +97,7 @@ export default async function LeftSidebar() {
           </p>
         </div>
       </div>
-      <nav className="flex-grow">
+      <nav className="flex-gr2ow">
         <ul className="space-y-2">
           {navItems.map(({ icon: Icon, label, href }) => (
             <li key={label}>
