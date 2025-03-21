@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { HeartIcon, MessageCircleIcon, Share2Icon, ClockIcon } from "./Icons";
 import { useAuth } from "@clerk/nextjs";
 import { likeAction } from "@/lib/actions";
-import ReplyForm from "./ReplyForm";
+import ReplyForm from "@/components/component/ReplyForm";
 
 interface LikeState {
   likeCount: number;

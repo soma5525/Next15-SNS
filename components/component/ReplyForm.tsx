@@ -1,12 +1,12 @@
 "use client";
 
 import { addReplyAction } from "@/lib/actions";
-import { error } from "console";
 import React, { useRef, useState } from "react";
 import { useFormState } from "react-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import SubmitButton from "./SubmitButton";
-import { auth } from "@clerk/nextjs/server";
+import { useUser } from "@clerk/nextjs";
+import { Input } from "../ui/input";
 
 interface ReplyFormProps {
   postId: string;
@@ -23,26 +23,44 @@ export default function ReplyForm({ postId, onClose }: ReplyFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(addReplyAction, initialState);
 
+  const { user, isLoaded } = useUser();
+
   if (state.success && formRef.current) {
     formRef.current.reset();
   }
 
   return (
-    <div className="mt-4">
-      <div className="flex items-center gap-4">
-        <Avatar className="w-8 h-8">
-          <AvatarImage src="/placeholder-user.jpg" />
-          <AvatarFallback>AC</AvatarFallback>
+    <div className="mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg p-3 ">
+      <div className="flex gap-3">
+        <Avatar className="w-9 h-9 shrink-0 mt-1">
+          {isLoaded ? (
+            <>
+              <AvatarImage src={user?.imageUrl || "/placeholder-user.jpg"} />
+              <AvatarFallback className="bg-primary/10 text-primary">
+                {user?.firstName?.[0] ||
+                  user?.username?.[0] ||
+                  user?.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() ||
+                  "U"}
+              </AvatarFallback>
+            </>
+          ) : (
+            <AvatarFallback>...</AvatarFallback>
+          )}
         </Avatar>
-        <form ref={formRef} action={formAction} className="flex-1">
-          <textarea
-            name="reply"
-            placeholder="リプライを入力してください"
-            className="w-full rounded bg-muted px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={3}
-          />
-          <input type="hidden" name="postId" value={postId} />
-          <div className="mt-2 flex justify-end gap-2">
+        <form
+          ref={formRef}
+          action={formAction}
+          className="flex items-center justify-between"
+        >
+          <div className="flex-1">
+            <Input
+              type="text"
+              placeholder="Enter your reply"
+              className="rounded-full bg-muted px-4 py-2"
+              name="post"
+            />
+          </div>
+          <div className="flex gap-2">
             <SubmitButton />
             <button
               type="button"

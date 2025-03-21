@@ -252,3 +252,50 @@ export async function addReplyAction(
     }
   }
 }
+
+export const deleteReplyAction = async (replyId: string) => {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("Uユーザー認証が必要です。");
+  }
+
+  try {
+    // 投稿が存在し、かつ現在のユーザーが作成者であることを確認
+    const reply = await prisma.reply.findUnique({
+      where: {
+        id: replyId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    if (!reply) {
+      throw new Error("投稿が見つかりません。");
+    }
+
+    if (reply.userId !== userId) {
+      throw new Error("リプライを削除する権限がありません。");
+    }
+
+    // リプライを削除
+    await prisma.reply.delete({
+      where: {
+        id: replyId,
+      },
+    });
+
+    revalidatePath("/");
+    return {
+      error: undefined,
+      success: true,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: error instanceof Error ? error.message : "エラーが発生しました。",
+      success: false,
+    };
+  }
+};

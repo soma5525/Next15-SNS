@@ -70,12 +70,20 @@ export default async function LeftSidebar() {
 
   return (
     <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-md p-4 h-full flex flex-col">
-      <div className="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex rounded-full items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
         <Link href={`profile/${username}`}>
-          <Avatar className="w-12 h-12">
-            <AvatarImage src={userImage} />
-            <AvatarFallback>{initials}</AvatarFallback>
-          </Avatar>
+          <div className="overflow-hidden rounded-full">
+            <Avatar className="w-12 h-12">
+              <AvatarImage
+                src={userImage}
+                alt={name}
+                className="w-full h-full object-cover"
+              />
+              <AvatarFallback className="w-full h-full flex items-center justify-center">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+          </div>
         </Link>
         <div>
           <h3 className="text-lg font-bold">{name}</h3>

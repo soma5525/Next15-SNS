@@ -11,7 +11,6 @@ export async function POST(req: Request) {
       "Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env"
     );
   }
-
   // Create new Svix instance with secret
   const wh = new Webhook(SIGNING_SECRET);
 

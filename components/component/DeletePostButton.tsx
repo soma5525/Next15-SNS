@@ -5,17 +5,17 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { TrashIcon } from "lucide-react";
 
-interface DeleteButtonProps {
+interface DeletePostButtonProps {
   postId: string;
   isAuthor: boolean;
   onDeleteSuccess?: () => void;
 }
 
-const DeleteButton = ({
+const DeletePostButton = ({
   postId,
   isAuthor,
   onDeleteSuccess,
-}: DeleteButtonProps) => {
+}: DeletePostButtonProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   if (!isAuthor) {
@@ -61,4 +61,4 @@ const DeleteButton = ({
   );
 };
 
-export default DeleteButton;
+export default DeletePostButton;

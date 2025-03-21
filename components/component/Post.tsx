@@ -1,12 +1,10 @@
 import React from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ClockIcon, HeartIcon } from "./Icons";
+import { ClockIcon } from "./Icons";
 import PostInteraction from "./PostInteraction";
 import Link from "next/link";
-import { Button } from "../ui/button";
 import ReplyItem from "./ReplyItem";
-import { Delete } from "lucide-react";
-import DeleteButton from "./DeleteButton";
+import DeletePostButton from "./DeletePostButton";
 import { auth } from "@clerk/nextjs/server";
 
 const Post = ({ post }: any) => {
@@ -21,18 +19,19 @@ const Post = ({ post }: any) => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
           <Link href={`/profile/${post.author.username}`}>
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={post.author.image} />
-              <AvatarFallback>AC</AvatarFallback>
-            </Avatar>
+            <div className="overflow-hidden rounded-full">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={post.author.image} alt={post.author.name} />
+                <AvatarFallback>AC</AvatarFallback>
+              </Avatar>
+            </div>
           </Link>
           <div>
             <h3 className="text-lg font-bold">{post.author.name}</h3>
             <p className="text-muted-foreground">@{post.author.username}</p>
           </div>
         </div>
-
-        <DeleteButton postId={post.id} isAuthor={isAuthor} />
+        <DeletePostButton postId={post.id} isAuthor={isAuthor} />
       </div>
 
       {/* 投稿内容 */}
