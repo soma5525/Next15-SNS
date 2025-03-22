@@ -14,9 +14,9 @@ interface PostType {
   createdAt: string | Date;
   author: {
     id: string;
-    name: string;
+    name: string | null;
     username: string;
-    image: string;
+    image: string | null;
   };
   likes: { userId: string }[];
   replies: any[];
@@ -52,13 +52,20 @@ const Post = ({ post }: { post: PostType }) => {
           <Link href={`/profile/${post.author.username}`}>
             <div className="overflow-hidden rounded-full">
               <Avatar className="w-10 h-10">
-                <AvatarImage src={post.author.image} alt={post.author.name} />
-                <AvatarFallback>AC</AvatarFallback>
+                <AvatarImage
+                  src={post.author.image || ""}
+                  alt={post.author.name || post.author.username}
+                />
+                <AvatarFallback>
+                  {post.author.username.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
             </div>
           </Link>
           <div>
-            <h3 className="text-lg font-bold">{post.author.name}</h3>
+            <h3 className="text-lg font-bold">
+              {post.author.name || post.author.username}
+            </h3>
             <p className="text-muted-foreground">@{post.author.username}</p>
           </div>
         </div>

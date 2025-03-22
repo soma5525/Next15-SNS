@@ -39,7 +39,7 @@ const ReplyItem: React.FC<{ reply: Reply }> = ({ reply }) => {
     <div className="flex gap-3">
       <Link href={`/profile/${reply.user.username}`} className="shrink-0 mt-1">
         <Avatar className="w-8 h-8">
-          <AvatarImage src={reply.user.image} />
+          <AvatarImage src={reply.user.image || ""} />
           <AvatarFallback>
             {reply.user.name?.[0] || reply.user.username?.[0]}
           </AvatarFallback>
