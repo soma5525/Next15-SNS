@@ -7,9 +7,40 @@ import ReplyItem from "./ReplyItem";
 import DeletePostButton from "./DeletePostButton";
 import { auth } from "@clerk/nextjs/server";
 
-const Post = ({ post }: any) => {
+// 投稿の型を定義
+interface PostType {
+  id: string;
+  content: string;
+  createdAt: string | Date;
+  author: {
+    id: string;
+    name: string;
+    username: string;
+    image: string;
+  };
+  likes: { userId: string }[];
+  replies: any[];
+  _count: {
+    replies: number;
+  };
+}
+
+const Post = ({ post }: { post: PostType }) => {
   const { userId } = auth();
   const isAuthor = post.author.id === userId;
+
+  // 日付をフォーマット
+  const formatDate = (dateString: string | Date) => {
+    const date =
+      typeof dateString === "string" ? new Date(dateString) : dateString;
+    return date.toLocaleString("ja-JP", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   return (
     <div
@@ -50,7 +81,7 @@ const Post = ({ post }: any) => {
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <ClockIcon className="h-5 w-5" />
-          <span>{post.createdAt.toLocaleString()}</span>
+          <span>{formatDate(post.createdAt)}</span>
         </div>
       </div>
 

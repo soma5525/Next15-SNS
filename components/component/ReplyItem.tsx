@@ -15,12 +15,26 @@ interface Reply {
   id: string;
   content: string;
   user: User;
-  createdAt: Date;
+  createdAt: string | Date;
 }
 
 const ReplyItem: React.FC<{ reply: Reply }> = ({ reply }) => {
   const { userId } = auth();
   const isAuthor = userId === reply.user.id;
+
+  // 日付をフォーマット
+  const formatDate = (dateString: string | Date) => {
+    const date =
+      typeof dateString === "string" ? new Date(dateString) : dateString;
+    return date.toLocaleString("ja-JP", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <div className="flex gap-3">
       <Link href={`/profile/${reply.user.username}`} className="shrink-0 mt-1">
@@ -45,7 +59,7 @@ const ReplyItem: React.FC<{ reply: Reply }> = ({ reply }) => {
             </span>
             <span className="text-xs text-muted-foreground">・</span>
             <span className="text-xs text-muted-foreground">
-              {reply.createdAt.toLocaleString()}
+              {formatDate(reply.createdAt)}
             </span>
           </div>
           <p className="text-sm break-words">{reply.content}</p>

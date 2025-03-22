@@ -1,3 +1,5 @@
+"use client";
+
 // components/LeftSidebar.tsx
 import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -10,30 +12,18 @@ import {
   HeartIcon,
   SettingsIcon,
 } from "./Icons";
-import { auth } from "@clerk/nextjs/server";
-import prisma from "@/lib/prisma";
+import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 
-// ユーザー情報を取得するヘルパー関数
-export async function getUserInfo(clerkId: string) {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { clerkId },
-      select: {
-        name: true,
-        username: true,
-        image: true,
-      },
-    });
-    return user;
-  } catch (error) {
-    console.error("Failed to fetch user info:", error);
-    return null;
-  }
+interface UserInfo {
+  name: string | null;
+  username: string | null;
+  image: string | null;
 }
 
-export default async function LeftSidebar() {
-  // auth()から認証情報を取得
-  const { userId } = auth();
+export default function LeftSidebar() {
+  const { user, isLoaded } = useUser();
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   // ユーザー情報の初期値
   let name = "Guest User";
@@ -41,22 +31,43 @@ export default async function LeftSidebar() {
   let userImage = "/placeholder-user.jpg";
   let initials = "GU";
 
-  // ログインしている場合、ユーザー情報を取得
-  if (userId) {
-    const userInfo = await getUserInfo(userId);
-
-    if (userInfo) {
-      name = userInfo.name || name;
-      username = userInfo.username || "";
-      userImage = userInfo.image || userImage;
-
-      // イニシャルの生成
-      if (username) {
-        initials = username.substring(0, 2).toUpperCase();
-      } else if (name !== "Guest User") {
-        initials = name.substring(0, 2).toUpperCase();
+  useEffect(() => {
+    async function fetchUserInfo() {
+      if (user?.id) {
+        try {
+          // ここでユーザー情報をAPIから取得
+          const response = await fetch(`/api/users/${user.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setUserInfo(data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch user info:", error);
+        }
       }
     }
+
+    if (isLoaded && user) {
+      fetchUserInfo();
+    }
+  }, [isLoaded, user]);
+
+  // ユーザー情報が取得できた場合は更新
+  if (userInfo) {
+    name = userInfo.name || user?.fullName || name;
+    username = userInfo.username || "";
+    userImage = userInfo.image || user?.imageUrl || userImage;
+  } else if (isLoaded && user) {
+    // Clerkから直接取得できる情報で更新
+    name = user.fullName || name;
+    userImage = user.imageUrl || userImage;
+  }
+
+  // イニシャルの生成
+  if (username) {
+    initials = username.substring(0, 2).toUpperCase();
+  } else if (name !== "Guest User") {
+    initials = name.substring(0, 2).toUpperCase();
   }
 
   // ユーザー名に基づいて動的にnavItemsを生成
@@ -97,7 +108,7 @@ export default async function LeftSidebar() {
           </p>
         </div>
       </div>
-      <nav className="flex-gr2ow">
+      <nav className="flex-grow">
         <ul className="space-y-2">
           {navItems.map(({ icon: Icon, label, href }) => (
             <li key={label}>

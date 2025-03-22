@@ -1,7 +1,7 @@
 "use client";
 
 import { addReplyAction } from "@/lib/actions";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useFormState } from "react-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import SubmitButton from "./SubmitButton";
@@ -57,8 +57,9 @@ export default function ReplyForm({ postId, onClose }: ReplyFormProps) {
               type="text"
               placeholder="Enter your reply"
               className="rounded-full bg-muted px-4 py-2"
-              name="post"
+              name="reply"
             />
+            <input type="hidden" name="postId" value={postId} />
           </div>
           <div className="flex gap-2">
             <SubmitButton />

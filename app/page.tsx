@@ -5,9 +5,13 @@ import RightSidebar from "@/components/component/RightSidebar";
 export default function Home() {
   return (
     <div className="h-full grid grid-cols-1 md:grid-cols-[240px_1fr_240px] gap-6 p-6 overflow-hidden">
-      <LeftSidebar />
+      <div className="hidden md:block">
+        <LeftSidebar />
+      </div>
       <MainContent />
-      <RightSidebar />
+      <div className="hidden md:block">
+        <RightSidebar />
+      </div>
     </div>
   );
 }
